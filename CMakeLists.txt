@@ -3,5 +3,7 @@ project(Template VERSION 0.0.1)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Template src/main.cpp)
+set(EXECUTABLE_OUTPUT_PATH  ${PROJECT_SOURCE_DIR}/build/)
 
+
+add_executable(Template src/main.cpp)

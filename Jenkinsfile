@@ -6,12 +6,14 @@ pipeline {
     stages {
         stage('Build') { 
             steps { 
-                sh 'make' 
+                sh 'cmake .'
+                sh 'cmake --build .' 
             }
         }
         stage('Test'){
             steps {
                 sleep(2)
+                sh '/build/Debug/Template.exe'
                 // sh 'make check'
                 // junit 'reports/**/*.xml' 
             }
@@ -20,6 +22,13 @@ pipeline {
             steps {
                 sleep(2)
                 //sh 'make publish'
+            }
+        }
+        stage('clean') {
+            steps {
+                sleep(2)
+                sh 'git clean -d -f -x'
+                sh 'n'
             }
         }
     }

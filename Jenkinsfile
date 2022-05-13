@@ -28,7 +28,6 @@ pipeline {
             steps {
                 sleep(2)
                 sh 'git clean -d -f -x'
-                sh 'n'
             }
         }
     }

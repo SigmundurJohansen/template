@@ -12,7 +12,6 @@ pipeline {
         }
         stage('Test'){
             steps {
-                sleep(2)
                 sh './build/Template'
                 // sh 'make check'
                 // junit 'reports/**/*.xml' 
@@ -24,9 +23,8 @@ pipeline {
                 //sh 'make publish'
             }
         }
-        stage('clean') {
+        stage('Clean') {
             steps {
-                sleep(2)
                 sh 'git clean -d -f -x'
             }
         }

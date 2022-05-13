@@ -7,8 +7,8 @@ default: all
 
 all: Hello
 
-Hello: Hello.c
-    $(CC) $(CFLAGS) -o Hello hello.cpp
+Hello: hello.cpp
+    $(CC) hello.cpp
 
 clean veryclean:
     $(RM) Hello

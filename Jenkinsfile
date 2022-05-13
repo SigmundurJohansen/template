@@ -13,7 +13,7 @@ pipeline {
         stage('Test'){
             steps {
                 sleep(2)
-                sh '/build/Template'
+                sh './build/Template'
                 // sh 'make check'
                 // junit 'reports/**/*.xml' 
             }

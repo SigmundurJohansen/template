@@ -1,4 +1,4 @@
-#define DOCTEST_CONFIG_IMPLEMENT
+#define DOCTEST_CONFIG_DISABLE
 #include <doctest/doctest.h>
 #include <iostream>
 #include "include/prime_factorial.h"

@@ -1,5 +1,5 @@
 #pragma once
-int factorial(int number) { return number <= 1 ? number : factorial(number - 1) * number; }
+int factorial(int _number) { return _number <= 1 ? _number : factorial(_number - 1) * _number; }
 
 TEST_CASE("testing the factorial function") {
     CHECK(factorial(1) == 1);

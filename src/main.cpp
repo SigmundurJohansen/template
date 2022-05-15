@@ -8,7 +8,7 @@ bool TESTING = true;
 
 int program();
 
-int main(int argc, char **argv)
+int main(int _argc, char **_argv)
 {
     int client_return_code = 0;
     int test_query = 0;

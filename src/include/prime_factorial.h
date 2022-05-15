@@ -3,62 +3,53 @@
 #include <vector>
 using namespace std;
 
-bool is_Prime(int x)
+bool is_Prime(int _x)
 {
-  // invalid input
-  if (x <= 1)
-    return false;
+   if (_x <= 1) // invalid input
+      return false;
 
-  // process all potential divisors
-  for(int i = 2; i <= x / 2; i++) {
-      if(x % i == 0) {
+   for (int i = 2; i <= _x / 2; i++) // process all potential divisors
+   {
+      if (_x % i == 0)
          return false;
-      }
    }
 
-  // no divisor found, therfore it's a prime number
-  return true;
+   return true; // no divisor found, therfore it's a prime number
 }
 
-
-int prime_factorial(int _number) {
-
-   // vector to store all the prime factors of a number
-   vector<int>Factors;
+int prime_factorial(int _number)
+{
+   vector<int> Factors; // vector to store all the prime factors of a number
    // iterate from 2 to half of the number as there can be no factor
-   // greater than half of the number. 
-   for(int i = 2; i <= _number/2; i++)
+   // greater than half of the number.
+   for (int i = 2; i <= _number / 2; i++)
    {
-      //check if number is factor
-      if(_number % i == 0)
+      if (_number % i == 0) // check if number is factor
       {
-         // check if the factor is also a prime number
-         if(is_Prime(i)==true)
+         if (is_Prime(i) == true) // check if the factor is also a prime number
          {
-         // add the value in the vector
-         Factors.push_back(i);
+            Factors.push_back(i); // add the value in the vector
          }
       }
    }
-   int max=1;
-   // iterate the vector to find largest prime factor
-   for(int i = 0; i < Factors.size(); i++)
+   int max = 1;
+
+   for (int i = 0; i < Factors.size(); i++) // iterate the vector to find largest prime factor
    {
-      if(Factors[i] > max)
+      if (Factors[i] > max)
       {
          max = Factors[i];
       }
    }
-   
-// output the largest prime factor
-   cout<<"Largest prime factor = " << max<<endl;
+
+   // output the largest prime factor
+   cout << "Largest prime factor = " << max << endl;
    return max;
 }
 
-
-TEST_CASE("testing the factorial function") {
-    CHECK(prime_factorial(1) == 1);
-    CHECK(prime_factorial(2) == 1);
-    CHECK(prime_factorial(4) == 2);   
-    INFO("The prime factorial function");
+TEST_CASE("testing the prime factorial function")
+{
+   CHECK(prime_factorial(1) == 1);
+   CHECK(prime_factorial(2) == 1);
+   CHECK(prime_factorial(4) == 2);
 }

@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 17)
 add_subdirectory(external/doctest)
 
 file(GLOB SOURCES 
-    "src/*.cpp", "*.cpp", "*/*.cpp", "*/*/*.cpp",  
+    "src/*.cpp", "*.cpp", "*/*.cpp", "*/*/*.cpp",
     "*.h", "*/*.h", "*/*/*.h"
 )
 
@@ -23,7 +23,7 @@ target_include_directories(${PROJECT_NAME}
 include_directories(${DOCTEST_INCLUDE_DIR})
 
 
-add_executable(myTemplate ${SOURCES} ) #include/tests/hello_test.cc)
+add_executable(myTemplate ${SOURCES})
 
 target_link_libraries(myTemplate doctest)
 

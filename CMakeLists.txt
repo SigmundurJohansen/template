@@ -4,12 +4,10 @@ set(CMAKE_CXX_STANDARD 17)
 add_subdirectory(external/doctest)
 
 file(GLOB SOURCES 
-    "src/*.cpp", "*.cpp", "*/*.cpp", "*/*/*.cpp",
-    "*.h", "*/*.h", "*/*/*.h"
+    "src/*.cpp", "test/*.cpp"
 )
 
 add_library(${PROJECT_NAME} ${SOURCES} 
-            "../include/"
             "src/"
             )
 
@@ -17,7 +15,7 @@ target_include_directories(${PROJECT_NAME}
             PUBLIC
             "${PROJECT_SOURCE_DIR}/src"
             "${PROJECT_SOURCE_DIR}/src/include/"
-            "${PROJECT_SOURCE_DIR}/src/tests/"
+            "${PROJECT_SOURCE_DIR}/test/"
             )
 
 include_directories(${DOCTEST_INCLUDE_DIR})

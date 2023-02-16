@@ -46,10 +46,3 @@ int prime_factorial(int _number)
    cout << "Largest prime factor = " << max << endl;
    return max;
 }
-
-TEST_CASE("testing the prime factorial function")
-{
-   CHECK(prime_factorial(1) == 1);
-   CHECK(prime_factorial(2) == 1);
-   CHECK(prime_factorial(4) == 2);
-}

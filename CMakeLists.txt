@@ -23,6 +23,8 @@ add_subdirectory(${GLFW_LIB_NAME})
 file(GLOB SOURCES
     "src/*.cpp"
     "test/*.cpp"
+    "src/ui/*.cpp"
+    "src/utils/*.cpp"
     "external/glad/src/glad.c"
 )
 
@@ -85,6 +87,8 @@ target_include_directories(myTemplate
         ${GLAD_INC_PATH}
         "${PROJECT_SOURCE_DIR}/src"
         "${PROJECT_SOURCE_DIR}/src/include"
+        "${PROJECT_SOURCE_DIR}/src/ui"
+        "${PROJECT_SOURCE_DIR}/src/utils"
         "${PROJECT_SOURCE_DIR}/test"
 )
 

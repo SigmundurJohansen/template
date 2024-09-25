@@ -25,7 +25,7 @@ timer::~timer()
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - m_start);
 	double duration_milli = duration.count() / 1000.0;
 	std::stringstream ss;
-    ss << std::fixed << std::setprecision(2);
+	ss << std::fixed << std::setprecision(2);
 	ss << "Timing for " << m_name << ": " << duration_milli << " ms\n";
 	profiler::record_timing(ss.str());
 }

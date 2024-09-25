@@ -23,6 +23,15 @@ void glfwErrorCallback(int error, const char* description)
 
 int main(int _argc, char **_argv)
 {
+	
+	doctest::Context context;
+	int res = context.run(); // run
+
+	printf("Program code.\n");
+	prime_factorial(31798230);
+
+	std::cout << gettext("Hello World!") << std::endl;
+
     glfwSetErrorCallback(glfwErrorCallback);
 	if (!glfwInit())
 	{
@@ -96,17 +105,5 @@ int main(int _argc, char **_argv)
     glfwDestroyWindow(window);
     glfwTerminate();
 
-	/*
-	doctest::Context context;
-	int res = context.run(); // run
-
-	printf("Program code.\n");
-	prime_factorial(31798230);
-
-	std::cout << gettext("Hello World!") << std::endl;
-	*/
-	while (true)
-	{
-	}
 	return 0;
 }

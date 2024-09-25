@@ -6,8 +6,8 @@ pipeline {
     stages {
         stage('Build') { 
             steps { 
-                sh 'cmake .'
-                sh 'cmake --build .' 
+                sh 'sudo cmake .'
+                sh 'sudo cmake --build .' 
             }
         }
         stage('Test'){

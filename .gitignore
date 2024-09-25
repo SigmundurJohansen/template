@@ -1,0 +1,11 @@
+.vscode
+.cache
+build
+external/glfw/deps
+external/glfw/Cmake
+external/glfw/docs
+external/glfw/tests
+external/glfw/examples
+cmake*
+*.vcxproj
+*.sln

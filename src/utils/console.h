@@ -1,17 +1,18 @@
 #pragma once
-#include "singleton.h"
 #include "../include/imgui.h"
+#include "singleton.h"
 #include <string>
 #include <vector>
 
-struct logger : public singleton<logger>
+struct console : public singleton<console>
 {
-	logger(token){};
+	console(token){};
 	ImGuiTextBuffer m_buffer;
 	ImGuiTextFilter m_filter; // Keep scrolling if already at the bottom.
 	void clear();
-	void add_log(std::string _msg);
-	void draw(const char *title, bool *p_open = NULL);
+	void add_tagged_line(const char *_tag, std::string _msg, ...);
+	void add_line(std::string _msg);
+	void render(const char *title, bool *p_open = NULL);
 
   private:
 	bool m_auto_scroll = true;

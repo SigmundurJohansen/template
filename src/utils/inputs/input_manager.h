@@ -5,53 +5,42 @@
 #include <unordered_map>
 #include <vector>
 
-    class input_manager
-    {
-      public:
-        using action_callback_func = std::function<bool(input_source, int, float)>;
+struct input_manager : public singleton<input_manager>
+{
+  public:
+	using action_callback_func = std::function<bool(input_source, int, float)>;
+	struct action_callback
+	{
+		std::string ref;
+		action_callback_func func;
+	};
 
-        struct action_callback
-        {
-            std::string Ref;
-            action_callback_func Func;
-        };
+	input_manager(token){};
+	// process_input will get new device state and compare with old state; then generate action events
+	void process_input();
+	void register_device(const input_device &device);
+	void remove_device(intput_device_type source, int input_index);
+	void register_action_callback(const std::string &action_name, const action_callback &callback);
+	void remove_action_callback(const std::string &action_name, const std::string &callback_ref);
+	void map_input_to_action(input_key key, const input_action &action);
+	void unmap_input_from_action(input_key key, const std::string &action);
 
-      private:
-        struct action_event
-        {
-            std::string ActionName;
-            input_source Source;
-            int SourceIndex;
-            float Value;
-        };
 
-      public:
-        input_manager();
-        ~input_manager();
+  private:
+	struct action_event
+	{
+		std::string action_name;
+		input_source source;
+		int source_index;
+		float value;
+	};
 
-        void register_device(const input_device &device);
-        void remove_device(intput_device_type source, int inputIndex);
+	friend class Game;
 
-        void register_action_callback(const std::string &actionName, const action_callback &callback);
-        void remove_action_callback(const std::string &actionName, const std::string &callbackRef);
+	std::vector<action_event> generate_action_event(int device_index, input_key key, float new_val);
+	void propagate_action_event(action_event event);
 
-        void map_input_to_action(input_key key, const input_action &action);
-        void unmap_input_from_action(input_key key, const std::string &action);
-
-      private:
-        friend class Game;
-
-        // process_input will get new device state and compare with old state; then generate action events
-        void process_input();
-
-        std::vector<action_event> generate_action_event(int deviceIndex, input_key key, float newVal);
-        void propagate_action_event(action_event event);
-
-      private:
-        bool _active{false};
-
-        std::unordered_map<input_key, std::vector<input_action>> _input_actionMapping{};
-        std::unordered_map<std::string, std::vector<action_callback>> _action_callback{};
-
-        std::vector<input_device> _devices;
-    };
+	std::unordered_map<input_key, std::vector<input_action>> _input_action_mapping{};
+	std::unordered_map<std::string, std::vector<action_callback>> _action_callback{};
+	std::vector<input_device> _devices;
+};

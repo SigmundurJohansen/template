@@ -2,74 +2,78 @@
 #pragma once
 #include <string>
 
-    enum class input_key {
-        unknown,
-        key_a,
-        key_b,
-        key_c,
-        key_d,
-        key_e,
-        key_f,
-        key_g,
-        key_h,
-        key_i,
-        key_j,
-        key_k,
-        key_l,
-        key_m,
-        key_n,
-        key_o,
-        key_p,
-        key_q,
-        key_r,
-        key_s,
-        key_t,
-        key_u,
-        key_v,
-        key_w,
-        key_x,
-        key_y,
-        key_z,
-        SPACE,
-        GAMEPAD_L_THUMB_X,
-        GAMEPAD_L_THUMB_Y,
-        GAMEPAD_R_THUMB_X,
-        GAMEPAD_R_THUMB_Y,
-        GAMEPAD_R_TRIGGER,
-        GAMEPAD_L_TRIGGER,
-        GAMEPAD_Y,
-        GAMEPAD_X,
-        GAMEPAD_B,
-        GAMEPAD_A,
-        GAMEPAD_START,
-        GAMEPAD_SELECT,
-        GAMEPAD_BUMPER_R,
-        GAMEPAD_BUMPER_L,
-        GAMEPAD_L3,
-        GAMEPAD_R3,
-        GAMEPAD_DPAD_UP,
-        GAMEPAD_DPAD_RIGHT,
-        GAMEPAD_DPAD_LEFT,
-        GAMEPAD_DPAD_DOWN,
-        MOUSE_POS_X,
-        MOUSE_POS_Y,
-        MOUSE_MOVE_X,
-        MOUSE_MOVE_Y,
-        MOUSE_RIGHT,
-        MOUSE_LEFT,
-        MOUSE_MIDDLE
-    };
+enum class input_key
+{
+	unknown,
+	key_a,
+	key_b,
+	key_c,
+	key_d,
+	key_e,
+	key_f,
+	key_g,
+	key_h,
+	key_i,
+	key_j,
+	key_k,
+	key_l,
+	key_m,
+	key_n,
+	key_o,
+	key_p,
+	key_q,
+	key_r,
+	key_s,
+	key_t,
+	key_u,
+	key_v,
+	key_w,
+	key_x,
+	key_y,
+	key_z,
+	key_enter,
+	space,
+	gamepad_l_thumb_x
+	gamepad_l_thumb_y,
+	gamepad_r_thumb_x,
+	gamepad_r_thumb_y,
+	gamepad_r_trigger,
+	gamepad_l_trigger,
+	gamepad_y,
+	gamepad_x,
+	gamepad_b,
+	gamepad_a,
+	gamepad_start,
+	gamepad_select,
+	gamepad_bumper_r,
+	gamepad_bumper_l,
+	gamepad_l3,
+	gamepad_r3,
+	gamepad_dpad_up,
+	gamepad_dpad_right,
+	gamepad_dpad_left,
+	gamepad_dpad_down,
+	mouse_pos_x,
+	mouse_pos_y,
+	mouse_move_x,
+	mouse_move_y,
+	mouse_right,
+	mouse_left,
+	mouse_middle
+};
 
-    enum class input_source {
-        KEYBOARD,
-        MOUSE,
-        GAMEPAD,
-        UNKNOWN
-    };
+enum class input_source
+{
+	keyboard,
+	mouse,
+	gamepad,
+	unknown
+};
 
-    struct input_action {
-        std::string actionName { "" };
-        float scale { 1.f };
-    };
+struct input_action
+{
+	std::string action_name{""};
+	float scale{1.f};
+};
 
-    input_source get_input_source_from_key(input_key key);
+input_source get_input_source_from_key(input_key key);

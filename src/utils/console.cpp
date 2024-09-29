@@ -41,7 +41,7 @@ void console::render(const char *title, bool *p_open)
 	// ImGui::DragInt("Max Height (in Lines)", &max_height_in_lines, 0.2f);
 	static ImGuiChildFlags child_flags = ImGuiChildFlags_Borders | ImGuiChildFlags_ResizeX | ImGuiChildFlags_ResizeY;
 
-	ImGui::SetNextItemWidth(ImGui::GetWindowWidth()-10);
+	ImGui::SetNextItemWidth(ImGui::GetWindowWidth() - 10);
 	if (ImGui::BeginChild("scrolling", ImVec2(0, 0), child_flags, ImGuiWindowFlags_HorizontalScrollbar))
 	{
 		std::string my_filter = m_filter.InputBuf;
@@ -66,7 +66,7 @@ void console::render(const char *title, bool *p_open)
 		ImGui::SetKeyboardFocusHere(); // Refocus the input field
 		is_should_refocus = false;	   // Reset the flag after refocusing
 	}
-	ImGui::SetNextItemWidth(ImGui::GetWindowWidth()-15);
+	ImGui::SetNextItemWidth(ImGui::GetWindowWidth() - 15);
 	ImGui::InputText("##", s_keyboard_state, sizeof(s_keyboard_state));
 	if (s_keyboard_state[0] != '\0')
 		m_is_empty = false;
@@ -80,11 +80,14 @@ void console::clear()
 	m_filter.Clear();
 }
 
-void console::add_line()
+int console::add_line()
 {
+	if (is_empty())
+		return 0;
 	std::string msg = s_keyboard_state;
 	text_buffer.emplace_back(msg);
 	s_keyboard_state[0] = 0;
 	m_is_empty = true;
 	is_should_refocus = true;
+	return 0;
 }

@@ -1,9 +1,10 @@
 #include "window.h"
 #include "../utils/console.h"
+#include "../utils/inputs/input_devices.h"
+#include "../utils/inputs/input_manager.h"
 #include "gui.h"
 #include "themes.h"
 #include <iostream>
-
 
 static bool b_wireframe = false;
 static bool b_wireframeToggle = false;
@@ -15,14 +16,14 @@ bool show_save_menu = false;
 bool show_load_menu = false;
 
 // Error callback function for GLFW
-void glfwErrorCallback(int error, const char *description)
+void glfw_error_callback(int error, const char *description)
 {
 	std::cerr << "GLFW Error: " << description << std::endl;
 }
 
 int window::init()
 {
-	glfwSetErrorCallback(glfwErrorCallback);
+	glfwSetErrorCallback(glfw_error_callback);
 	if (!glfwInit())
 	{
 		fprintf(stderr, "Failed to initialize GLFW\n");
@@ -42,7 +43,9 @@ int window::init()
 		return -1;
 	}
 	glfwMakeContextCurrent(m_window);
+	glfwSetWindowUserPointer(m_window, &_input);
 	glfwSwapInterval(1); // Enable vsync
+	set_input();
 
 	// Initialize GLAD (or GLEW)
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -81,34 +84,6 @@ int window::init()
 	return 0;
 }
 
-void SetDemoMode()
-{
-	if (b_show_demo_window != b_show_demo_windowToggle)
-	{
-		if (b_show_demo_window)
-			b_show_demo_windowToggle = true;
-		else
-			b_show_demo_windowToggle = false;
-	}
-}
-
-void SetWireframeMode()
-{
-	if (b_wireframe != b_wireframeToggle)
-	{
-		if (b_wireframe)
-		{
-			b_wireframeToggle = true;
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		}
-		else
-		{
-			b_wireframeToggle = false;
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		}
-	}
-}
-
 void window::render()
 {
 	m_should_exit = glfwWindowShouldClose(m_window);
@@ -120,12 +95,12 @@ void window::render()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
-	set_docking_mode(); // needs one ImGui::End();
+	m_docking_id = set_docking_mode(); // needs one ImGui::End();
 
 	if (b_show_demo_window)
 		ImGui::ShowDemoWindow(&b_show_demo_window);
 
-	ImGuiWindowFlags sidebar_window_flags = ImGuiWindowFlags_NoTitleBar;
+	ImGuiWindowFlags sidebar_window_flags = ImGuiDockNodeFlags_AutoHideTabBar;
 	ImGui::SetNextWindowBgAlpha(0.0f);					 // disable dockspace overlay over the game window
 	ImGui::Begin("Sidebar", NULL, sidebar_window_flags); // needs one ImGui::End();
 	ImGui::Separator();
@@ -146,8 +121,8 @@ void window::render()
 		}
 	}
 
-	SetWireframeMode();
-	SetDemoMode();
+	set_wireframe_mode();
+	set_demo_mode();
 
 	if (b_show_console)
 		show_console(&b_show_console);
@@ -208,6 +183,103 @@ void window::render()
 	glfwSwapBuffers(m_window);
 }
 
+void window::set_demo_mode()
+{
+	if (b_show_demo_window != b_show_demo_windowToggle)
+	{
+		if (b_show_demo_window)
+			b_show_demo_windowToggle = true;
+		else
+			b_show_demo_windowToggle = false;
+	}
+}
+
+void window::set_wireframe_mode()
+{
+	if (b_wireframe != b_wireframeToggle)
+	{
+		if (b_wireframe)
+		{
+			b_wireframeToggle = true;
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		}
+		else
+		{
+			b_wireframeToggle = false;
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
+	}
+}
+
+
+void window::resize()
+{
+}
+
+void window::set_input()
+{
+	auto &input_manager = input_manager::get_instance();
+	for (int i = 0; i <= GLFW_JOYSTICK_LAST; i++)
+	{
+		if (glfwJoystickPresent(i))
+		{
+			// Register connected devices
+			input_manager.register_device(input_device{
+			  .m_type = intput_device_type::gamepad,
+			  .m_index = i,
+			  .m_state_func = std::bind(&window::get_gamepad_state, this,
+										std::placeholders::_1)});
+		}
+	}
+
+	glfwSetKeyCallback(m_window, [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+                               // Get the input
+                               auto *input = static_cast<multiplatform_input *>(glfwGetWindowUserPointer(window));
+
+                               if (input)
+                               {
+                                   // set the new value for key
+                                   float value = 0.f;
+
+                                   switch (action)
+                                   {
+                                   case GLFW_PRESS:
+                                   case GLFW_REPEAT:
+                                       value = 1.f;
+                                       break;
+                                   case GLFW_RELEASE:
+                                        value = 0.1f;
+										break;
+                                   default:
+                                       value = 0.f;
+                                   }
+                                   input->update_keyboard_state(key, value);
+                               } });
+
+	glfwSetMouseButtonCallback(m_window, [](GLFWwindow *window, int button, int action, int mods) {
+                                       // Get the input
+                                       auto *input = static_cast<multiplatform_input *>(glfwGetWindowUserPointer(window));
+
+                                       if (input)
+                                       {
+                                           input->update_mouse_state(button, action == GLFW_PRESS ? 1.f : 0.f);
+                                       } });
+
+	input_manager.register_device(input_device{
+	  .m_type = intput_device_type::keyboard,
+	  .m_index = 0,
+	  .m_state_func = std::bind(&multiplatform_input::get_keyboard_state, &_input, std::placeholders::_1)});
+
+	input_manager.register_device(input_device{
+	  .m_type = intput_device_type::mouse,
+	  .m_index = 0,
+	  .m_state_func = std::bind(&multiplatform_input::get_mouse_state, &_input, std::placeholders::_1)});
+}
+
+void window::update()
+{
+}
+
 void window::terminate()
 {
 	// Cleanup
@@ -216,4 +288,15 @@ void window::terminate()
 	ImGui::DestroyContext();
 	glfwDestroyWindow(m_window);
 	glfwTerminate();
+}
+
+std::unordered_map<input_key, input_device_state> window::get_gamepad_state(int joystick_d)
+{
+	GLFWgamepadstate state;
+	if (glfwGetGamepadState(joystick_d, &state))
+	{
+		return _input.get_gamepad_state(state);
+	}
+
+	return std::unordered_map<input_key, input_device_state>{};
 }

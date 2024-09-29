@@ -9,9 +9,9 @@ struct SaveState
 	std::string file_path;
 };
 
-void set_docking_mode()
+ImGuiID set_docking_mode()
 {
-	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_NoTabBar;
+	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_AutoHideTabBar;
 	ImGuiViewport *viewport = ImGui::GetMainViewport();
 	// ImGui::DockSpaceOverViewport(viewport); // enable dockspace on main window
 	ImGui::SetNextWindowPos(viewport->Pos);
@@ -44,8 +44,11 @@ void set_docking_mode()
 		dock_flags |= ImGuiDockNodeFlags_CentralNode;
 		ImGui::DockBuilderDockWindow("Sidebar", dock_id_right);
 		ImGui::DockBuilderDockWindow("Console", dock_id_bottom);
+		auto& console = console::get_instance();
+		console.set_docking_id(dock_id_bottom);
 		ImGui::DockBuilderFinish(dockspace_id);
 	}
+	return dockspace_id;
 }
 
 void set_render_stats()
@@ -69,10 +72,10 @@ void list_saved_states(bool &_show)
 	ImGui::Separator();
 }
 
+
 void show_console(bool *p_open)
 {
 	auto &console = console::get_instance();
-	ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiCond_FirstUseEver);
 	// Actually call in the regular Log helper (which will Begin() into the same window as we just did)
 	console.render("Console", p_open);
 }
@@ -89,4 +92,3 @@ static void help_marker(const char *desc)
 		ImGui::EndTooltip();
 	}
 }
-

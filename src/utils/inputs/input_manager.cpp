@@ -168,3 +168,17 @@ void input_manager::remove_device(intput_device_type type, int inputIndex)
 	console.add_tagged_line("input_manager", "Device unregistered of type: ", static_cast<int>(type));
 	console.add_tagged_line("input_manager", "Device #: {}", _devices.size());
 }
+
+void input_manager::set_key_mapping()
+{
+	map_input_to_action(input_key::key_enter, input_action{.action_name = "enter"});
+	register_action_callback("enter", input_manager::action_callback{.ref = "enter console", .func = [](input_source source, int source_index, float value) {
+																		 if (value == 0.1f)
+																		 {
+																			 auto &console = console::get_instance();
+																			 if (!console.is_empty())
+																				 console.add_line();
+																		 }
+																		 return true;
+																	 }});
+}

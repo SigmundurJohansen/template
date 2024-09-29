@@ -33,7 +33,7 @@ enum class input_key
 	key_z,
 	key_enter,
 	space,
-	gamepad_l_thumb_x
+	gamepad_l_thumb_x,
 	gamepad_l_thumb_y,
 	gamepad_r_thumb_x,
 	gamepad_r_thumb_y,

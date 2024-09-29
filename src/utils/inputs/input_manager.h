@@ -24,6 +24,7 @@ struct input_manager : public singleton<input_manager>
 	void remove_action_callback(const std::string &action_name, const std::string &callback_ref);
 	void map_input_to_action(input_key key, const input_action &action);
 	void unmap_input_from_action(input_key key, const std::string &action);
+	void set_key_mapping();
 
 
   private:

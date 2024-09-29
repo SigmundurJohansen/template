@@ -1,5 +1,5 @@
 #include "gui.h"
-#include "../utils/logger.h"
+#include "../utils/console.h"
 #include <string>
 
 bool open_palette = false;
@@ -11,7 +11,7 @@ struct SaveState
 
 void set_docking_mode()
 {
-	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
+	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_NoTabBar;
 	ImGuiViewport *viewport = ImGui::GetMainViewport();
 	// ImGui::DockSpaceOverViewport(viewport); // enable dockspace on main window
 	ImGui::SetNextWindowPos(viewport->Pos);
@@ -26,7 +26,7 @@ void set_docking_mode()
 	ImGui::Begin("DockSpace", NULL, window_flags);
 
 	ImGui::PopStyleVar(3);
-	ImGuiID dockspace_id = ImGui::DockSpace(ImGui::GetID("DockSpace"), ImVec2(0, 0), ImGuiDockNodeFlags_PassthruCentralNode);
+	ImGuiID dockspace_id = ImGui::DockSpace(ImGui::GetID("DockSpace"), ImVec2(0, 0), dockspace_flags);
 
 	static auto first_time = true;
 	if (first_time)
@@ -43,7 +43,7 @@ void set_docking_mode()
 		ImGuiDockNodeFlags dock_flags = ImGuiDockNodeFlags_None;
 		dock_flags |= ImGuiDockNodeFlags_CentralNode;
 		ImGui::DockBuilderDockWindow("Sidebar", dock_id_right);
-		ImGui::DockBuilderDockWindow("Log", dock_id_bottom);
+		ImGui::DockBuilderDockWindow("Console", dock_id_bottom);
 		ImGui::DockBuilderFinish(dockspace_id);
 	}
 }
@@ -69,12 +69,12 @@ void list_saved_states(bool &_show)
 	ImGui::Separator();
 }
 
-void show_app_log(bool *p_open)
+void show_console(bool *p_open)
 {
-	auto &app = logger::get_instance();
+	auto &console = console::get_instance();
 	ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiCond_FirstUseEver);
 	// Actually call in the regular Log helper (which will Begin() into the same window as we just did)
-	app.draw("Log", p_open);
+	console.render("Console", p_open);
 }
 
 static void help_marker(const char *desc)

@@ -1,5 +1,5 @@
 #include "window.h"
-#include "../utils/logger.h"
+#include "../utils/console.h"
 #include "gui.h"
 #include "themes.h"
 #include <iostream>
@@ -7,7 +7,7 @@
 
 static bool b_wireframe = false;
 static bool b_wireframeToggle = false;
-static bool b_show_app_log = true;
+static bool b_show_console = true;
 static bool b_show_demo_window = false;
 static bool b_show_demo_windowToggle = false;
 
@@ -125,21 +125,21 @@ void window::render()
 	if (b_show_demo_window)
 		ImGui::ShowDemoWindow(&b_show_demo_window);
 
-	ImGuiWindowFlags sidebar_window_flags = 0;
+	ImGuiWindowFlags sidebar_window_flags = ImGuiWindowFlags_NoTitleBar;
 	ImGui::SetNextWindowBgAlpha(0.0f);					 // disable dockspace overlay over the game window
 	ImGui::Begin("Sidebar", NULL, sidebar_window_flags); // needs one ImGui::End();
 	ImGui::Separator();
 
 	// OPTIONS
 
-	if (ImGui::CollapsingHeader("Options"))
+	if (!ImGui::CollapsingHeader("Options"))
 	{
 		if (ImGui::BeginTable("split", 3))
 		{
 			ImGui::TableNextColumn();
 			ImGui::Checkbox("Wireframe", &b_wireframe);
 			ImGui::TableNextColumn();
-			ImGui::Checkbox("Log", &b_show_app_log);
+			ImGui::Checkbox("Console", &b_show_console);
 			ImGui::TableNextColumn();
 			ImGui::Checkbox("Demo", &b_show_demo_window);
 			ImGui::EndTable();
@@ -149,8 +149,8 @@ void window::render()
 	SetWireframeMode();
 	SetDemoMode();
 
-	if (b_show_app_log)
-		show_app_log(&b_show_app_log);
+	if (b_show_console)
+		show_console(&b_show_console);
 
 	ImGui::Separator();
 

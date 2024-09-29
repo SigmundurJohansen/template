@@ -9,3 +9,4 @@ external/glfw/examples
 cmake*
 *.vcxproj
 *.sln
+doc/html

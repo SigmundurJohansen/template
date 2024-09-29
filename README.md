@@ -1,19 +1,19 @@
 
-# Template
-intended to be a good starting point for a semi serious project in c++
+# Readme
+Intended to be a good starting point for a semi serious project in c++
 
 ### Included
 Jenkins CI
 C++
 CMake
 
-## Libraries included
-
-### Testing
+### Libraries included:
+glfw, glad, imgui
+#### Testing
 doctest
-### Localization
+#### Localization
 gettext
 
 
-## Useful instructions for meeting requirements
+### Useful instructions for meeting requirements
 vcpkg install gettext[tools]

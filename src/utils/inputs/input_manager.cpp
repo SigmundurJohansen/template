@@ -79,6 +79,9 @@ void input_manager::remove_action_callback(const std::string &actionName, const 
 	});
 }
 
+/// Map input to action
+/// 
+/// @warning doesn't check for duplicates
 void input_manager::map_input_to_action(input_key key, const input_action &action)
 {
 	// TODO: Check for duplicates
@@ -92,12 +95,15 @@ void input_manager::unmap_input_from_action(input_key key, const std::string &ac
 	});
 }
 
+
+/// process_input will get new device state and compare with old state; then generate action events
+///
+/// @warning can have conflicting mappings
 void input_manager::process_input()
 {
 	std::vector<action_event> events{};
 	for (auto &device : _devices)
 	{
-		// get new state for device
 		auto new_state = device.m_state_func(device.m_index);
 
 		// compare to old state for device
@@ -108,12 +114,10 @@ void input_manager::process_input()
 				// TODO: Fix cases where conflicting mappings -- additive fashion?
 				auto generated_events = generate_action_event(device.m_index, key_state.first, key_state.second.value);
 				events.insert(events.end(), generated_events.begin(), generated_events.end());
-				// save new state value
 				device.m_current_state[key_state.first].value = key_state.second.value;
 			}
 		}
 	}
-	// propagate action events
 	for (auto &event : events)
 	{
 		propagate_action_event(event);
@@ -176,7 +180,6 @@ void input_manager::set_key_mapping()
 																		 if (value == 0.1f)
 																		 {
 																			 auto &console = console::get_instance();
-																			 if (!console.is_empty())
 																				 console.add_line();
 																		 }
 																		 return true;

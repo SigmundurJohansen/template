@@ -5,6 +5,11 @@
 #include <unordered_map>
 #include <vector>
 
+/// Input Manager
+///
+/// The main controller for handeling all inputs.
+/// registering all devices or removing them.
+/// mapping all keybindings, and setting all callbacks.
 struct input_manager : public singleton<input_manager>
 {
   public:
@@ -16,7 +21,6 @@ struct input_manager : public singleton<input_manager>
 	};
 
 	input_manager(token){};
-	// process_input will get new device state and compare with old state; then generate action events
 	void process_input();
 	void register_device(const input_device &device);
 	void remove_device(intput_device_type source, int input_index);
@@ -36,11 +40,8 @@ struct input_manager : public singleton<input_manager>
 		float value;
 	};
 
-	friend class Game;
-
 	std::vector<action_event> generate_action_event(int device_index, input_key key, float new_val);
 	void propagate_action_event(action_event event);
-
 	std::unordered_map<input_key, std::vector<input_action>> _input_action_mapping{};
 	std::unordered_map<std::string, std::vector<action_callback>> _action_callback{};
 	std::vector<input_device> _devices;

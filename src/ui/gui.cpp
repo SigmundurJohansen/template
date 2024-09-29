@@ -2,13 +2,6 @@
 #include "../utils/console.h"
 #include <string>
 
-bool open_palette = false;
-struct SaveState
-{
-	std::string file_name;
-	std::string file_path;
-};
-
 ImGuiID set_docking_mode()
 {
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_AutoHideTabBar;
@@ -45,7 +38,6 @@ ImGuiID set_docking_mode()
 		ImGui::DockBuilderDockWindow("Sidebar", dock_id_right);
 		ImGui::DockBuilderDockWindow("Console", dock_id_bottom);
 		auto& console = console::get_instance();
-		console.set_docking_id(dock_id_bottom);
 		ImGui::DockBuilderFinish(dockspace_id);
 	}
 	return dockspace_id;

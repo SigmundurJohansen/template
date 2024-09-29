@@ -6,6 +6,9 @@
 #include <string>
 #include <vector>
 
+/// Profiler
+///
+/// Used for benchmarking, profiling
 class profiler
 {
   public:
@@ -17,6 +20,18 @@ class profiler
 	static std::mutex mutex_;
 };
 
+/// Timer
+///
+/// Used for timing functions or sections of code
+/// just make a timer, and it'll record the time from initalization to when it goes out of scope
+///
+/// ### Example
+/// ~~~~~~~~~~~~~~~~~~~~~~~~~.cpp
+/// { 
+///   timer("func name");
+///   func();
+/// }
+/// ~~~~~~~~~~~~~~~~~~~~~~~~~
 class timer
 {
   public:
@@ -31,6 +46,10 @@ class timer
 	std::chrono::time_point<std::chrono::high_resolution_clock> m_start;
 };
 
+/// Benchmark
+///
+/// Used for benchmarking a function by calling it N times
+/// need to divide by N yourself, if you want the average 
 template <typename Func>
 auto benchmark(Func test_func, int iterations)
 {

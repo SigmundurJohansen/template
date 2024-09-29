@@ -1,14 +1,9 @@
 #define DOCTEST_CONFIG_IMPLEMENT
 #include "../test/factorial_test.h"
-#include "include/factorial.h"
-#include "include/imgui.h"
-#include "include/prime_factorial.h"
 #include "ui/window.h"
 #include <doctest/doctest.h>
 #include <iostream>
 #include <libintl.h>
-#include <stdio.h>
-#include <string.h>
 
 const bool testing = false;
 

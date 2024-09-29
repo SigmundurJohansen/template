@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 project(Template VERSION 0.0.1 LANGUAGES CXX)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 # Ensure Vcpkg toolchain is used
 set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
@@ -22,6 +22,8 @@ add_subdirectory(${GLFW_LIB_NAME})
 # Glob all source files
 file(GLOB SOURCES
     "src/*.cpp"
+    "src/*/*.cpp"
+    "src/*/*/*.cpp"
     "test/*.cpp"
     "src/ui/*.cpp"
     "src/utils/*.cpp"
@@ -77,6 +79,8 @@ target_include_directories(ImGui
 find_package(doctest CONFIG REQUIRED)
 find_package(Intl REQUIRED)
 find_package(OpenGL REQUIRED)
+find_package(fmt CONFIG REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
 
 # Create executable
 add_executable(myTemplate ${SOURCES})
@@ -95,10 +99,11 @@ target_include_directories(myTemplate
 # Link libraries (glfw, ImGui, OpenGL)
 target_link_libraries(myTemplate
     PUBLIC
+    PRIVATE
         glfw
         ImGui
         OpenGL::GL
-    PRIVATE
+        spdlog::spdlog
         Intl::Intl
         doctest::doctest
 )
